@@ -1,0 +1,68 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    /* background: linear-gradient(rgb(47, 150, 163), rgb(48, 62, 143)); */
+    background: linear-gradient(to right, #dd1818, #333333); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    font-family: sans-serif;
+    color: white;
+}
+
+.buttons {
+    height: 30vh;
+    width: 45%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#first,
+#second,
+#third {
+    background: white;
+    color: black;
+    height: 40px;
+    width: 90px;
+    border-radius: 20px;
+    border: none;
+}
+
+.location,
+.temperature {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.temperature {
+    flex-direction: column;
+}
+
+.degree-section {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.degree-section span {
+    margin: 10px;
+    font-size: 30px;
+}
+
+.degree-section h2 {
+    font-size: 40px;
+}
+
+.darksky {
+    /* display: none; */
+    height: 50vh;
+    width: 50%;
+}
