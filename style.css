@@ -6,7 +6,7 @@
 
 body {
     height: 100vh;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     flex-direction: column;
     align-items: center;
@@ -18,21 +18,21 @@ body {
 
 .buttons {
     height: 30vh;
-    width: 45%;
+    width: 40%;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin: auto;
 }
 
-#first,
-#second,
+#darkSky,
+#openWeather,
 #third {
     background: white;
     color: black;
-    height: 40px;
-    width: 90px;
     border-radius: 20px;
     border: none;
+    padding: 15px;
 }
 
 .location,
@@ -62,7 +62,7 @@ body {
 }
 
 .darksky {
-    /* display: none; */
     height: 50vh;
     width: 50%;
+    margin: auto;
 }
