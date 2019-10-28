@@ -8,6 +8,7 @@ window.addEventListener("load", () => {
     const temperatureSpan = document.querySelector(".temperature span");
     let darkSkybut = document.querySelector("#darkSky");
     let openWeatherbut = document.querySelector("#openWeather");
+    let weatherstackbut = document.querySelector("#weatherstack");
     let weatherUnit = "F";
     let tempInF = null;
 
@@ -16,7 +17,7 @@ window.addEventListener("load", () => {
         setWeather();
     })
 
-    // Allow/Block find your location
+    // Allow/Block know your location
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
             long = position.coords.longitude;
@@ -25,6 +26,25 @@ window.addEventListener("load", () => {
             const proxy = `https://cors-anywhere.herokuapp.com/`;
             const api = `${proxy}https://api.darksky.net/forecast/a3f6e105434bb120691e7e8ef4cf6303/${lat},${long}`;
             const api2 = `${proxy}api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=imperial&APPID=b0dd24d4643315fefa7f09ed84a843ec`;
+            const api3 = `${proxy}http://api.weatherstack.com/current?access_key=e73da029a52c40748c6df693a526f172&query=${lat},${long}&units=f`;
+
+            // weatherstack API button
+            weatherstackbut.addEventListener("click", () => {
+                fetch(api3)
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        // Set DOM Elem from the API
+                        temperatureDescription.textContent = data.current.weather_descriptions[0];
+                        locationTimezone.textContent = data.location.name;
+                        // Set Icon
+                        setIconsweatherstack(data.current.weather_descriptions[0], document.querySelector(".icon"));
+                        tempInF = data.current.temperature;
+                        setWeather();
+                    })
+            })
 
             // OpenWeather API button
             openWeatherbut.addEventListener("click", () => {
@@ -38,8 +58,8 @@ window.addEventListener("load", () => {
                         temperatureDescription.textContent = data.weather[0].description;
                         locationTimezone.textContent = data.sys.country;
                         // Set Icon
-                        setIconsOpenWeather(data.weather[0].description, document.querySelector(".icon"));
-                        tempInF = data.main.temp
+                        setIconsOpenWeather(data.weather[0].main, document.querySelector(".icon"));
+                        tempInF = data.main.temp;
                         setWeather();
                     })
             })
@@ -58,22 +78,24 @@ window.addEventListener("load", () => {
                         locationTimezone.textContent = data.timezone;
                         // Set Icon
                         setIconDarkSky(icon, document.querySelector(".icon"));
-                        tempInF = temperature
+                        tempInF = temperature;
                         setWeather();
                     })
-            });
-        });
+            })
+        })
     }
 
+    // Change unit temp measure Fahrenheit/Celsius
     function changeUnit() {
         if (weatherUnit == "F") {
-            weatherUnit = "C"
+            weatherUnit = "C";
         }
         else {
-            weatherUnit = "F"
+            weatherUnit = "F";
         }
     }
 
+    // Convert Fahrenheit to Celsius
     function setWeather() {
         if (tempInF == null) {
             temperatureDegree.textContent = "N/A";
@@ -88,36 +110,54 @@ window.addEventListener("load", () => {
         }
     }
 
-    function setIconsOpenWeather(type, iconId) {
+
+    // Icons for weatherstack
+    function setIconsweatherstack(type, iconId) {
         switch (type) {
-            case "wind":
-                setIcons("WIND", iconId)
-                break;
-            case "clear sky":
+            // case "wind":
+            //     setIcons("WIND", iconId)
+            //     break;
+            case "Sunny":
+            case "Clear":
                 setIcons("CLEAR_DAY", iconId)
                 break;
-            case "clear night":
+            case "Clear":
                 setIcons("CLEAR_NIGHT", iconId)
                 break;
-            case "partly cloudy day":
+            case "Partly cloudy":
                 setIcons("PARTLY_CLOUDY_DAY", iconId)
                 break;
-            case "partly cloudy night":
+            case "Partly cloudy":
                 setIcons("PARTLY_CLOUDY_NIGHT", iconId)
                 break;
-            case "cloudy":
+            case "Cloudy":
                 setIcons("CLOUDY", iconId)
                 break;
-            case "rain":
+            case "Heavy rain at times":
+            case "Light rain":
+            case "Patchy rain possible":
+            case "Thundery":
+            case "Patchy light rain":
+            case "Moderate rain at times":
+            case "Light freezing rain":
                 setIcons("RAIN", iconId)
                 break;
-            case "sleet":
-                setIcons("SLEET", iconId)
-                break;
-            case "snow":
+            // case "sleet":
+            //     setIcons("SLEET", iconId)
+            //     break;
+            case "Patchy snow possible":
+            case "Patchy freezing drizzle possible":
+            case "Blowing snow":
+            case "Blizzard":
+            case "Patchy light drizzle":
+            case "Light drizzle":
+            case "Freezing drizzle":
+            case "Heavy freezing drizzle":
                 setIcons("SNOW", iconId)
                 break;
-            case "fog":
+            case "Fog":
+            case "Mist":
+            case "Freezing fog":
                 setIcons("FOG", iconId)
                 break;
             default:
@@ -125,6 +165,53 @@ window.addEventListener("load", () => {
         }
     }
 
+
+    // Icons for OpenWeather
+    function setIconsOpenWeather(type, iconId) {
+        switch (type) {
+            case "Tornado":
+            case "Squall":
+                setIcons("WIND", iconId)
+                break;
+            case "Clear":
+                setIcons("CLEAR_DAY", iconId)
+                break;
+            case "Clear":
+                setIcons("CLEAR_NIGHT", iconId)
+                break;
+            // case "partly cloudy day":
+            //     setIcons("PARTLY_CLOUDY_DAY", iconId)
+            //     break;
+            // case "partly cloudy night":
+            //     setIcons("PARTLY_CLOUDY_NIGHT", iconId)
+            //     break;
+            case "Clouds":
+                setIcons("CLOUDY", iconId)
+                break;
+            case "Rain":
+            case "Thunderstorm":
+                setIcons("RAIN", iconId)
+                break;
+            case "Drizzle":
+                setIcons("SLEET", iconId)
+                break;
+            case "Snow":
+                setIcons("SNOW", iconId)
+                break;
+            case "Mist":
+            case "Smoke":
+            case "Haze":
+            case "Dust":
+            case "Sand":
+            case "Ash":
+                setIcons("FOG", iconId)
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Icon for DarkSky
     function setIconDarkSky(icon, iconId) {
         const currentIcon = icon.replace(/-/g, "_").toUpperCase();
         setIcons(currentIcon, iconId)
