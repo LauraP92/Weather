@@ -1,3 +1,40 @@
+/* Tablet Landscape */
+@media screen and (max-width: 1060px) {
+    #primary { width:67%; }
+    #secondary { width:30%; margin-left:3%;}  
+}
+
+/* Tabled Portrait */
+@media screen and (max-width: 768px) {
+    #primary { width:100%; }
+    #secondary { width:100%; margin:0; border:none; }
+}
+
+@media (min-width: 400px) { body {
+    font-size:1rem;
+} #darkSky {
+    margin-right: 9px;
+} #openWeather {
+    margin-right: 9px;
+}}
+ 
+@media (min-width:960px) { 
+    body {font-size:1.2rem;
+    } #darkSky {
+        margin-right: 9px;
+    } #openWeather {
+        margin-right: 9px;
+    }} 
+    
+@media (min-width:1100px) { 
+    body {font-size:1.5rem;
+    } #darkSky {
+        margin-right: 9px;
+    } #openWeather {
+        margin-right: 9px;
+    }}
+
+
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +48,10 @@ body {
     flex-direction: column;
     align-items: center;
     /* background: linear-gradient(rgb(47, 150, 163), rgb(48, 62, 143)); */
-    background: linear-gradient(to right, #dd1818, #333333); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    /* background: linear-gradient(to right, #dd1818, #333333); W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: url("panjinda-iIqiI5fyZKs-unsplash.jpg");
+    background-size: cover;
+    max-width: 100%;
     font-family: sans-serif;
     color: white;
 }
@@ -20,19 +60,41 @@ body {
     height: 30vh;
     width: 40%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    margin: auto;
+    margin: 0 auto;
+}
+
+#darkSky:hover, 
+#openWeather:hover, 
+#weatherstack:hover {
+    color: #494949 !important;
+    border-radius: 50px;
+    border-color: #494949 !important;
+    transition: all 0.3s ease 0s;
+}
+
+
+button {
+    background:  rgb(201,210,211);;
 }
 
 #darkSky,
 #openWeather,
 #weatherstack {
-    background: white;
     color: black;
-    border-radius: 20px;
-    border: none;
+    border-radius: 6px;
+    border: 4px solid #20bf6b;
     padding: 15px;
+    transition: all 0.3s ease 0s;
+    outline: 0;
+}
+
+.activebutton {
+    color: #494949 !important;
+    border-radius: 50px !important;
+    border-color: #494949 !important;
+    transition: all 0.3s ease 0s;
 }
 
 .location,

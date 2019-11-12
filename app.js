@@ -11,11 +11,15 @@ window.addEventListener("load", () => {
     let weatherstackbut = document.querySelector("#weatherstack");
     let weatherUnit = "F";
     let tempInF = null;
-
+    let openpage = false;
+    
     temperatureSection.addEventListener("click", () => {
-        changeUnit();
-        setWeather();
+        if (openpage == true) {
+            changeUnit();
+            setWeather();
+        }
     })
+
 
     // Allow/Block know your location
     if (navigator.geolocation) {
@@ -30,6 +34,10 @@ window.addEventListener("load", () => {
 
             // weatherstack API button
             weatherstackbut.addEventListener("click", () => {
+                weatherstackbut.classList.add('activebutton');
+                darkSkybut.classList.remove('activebutton');
+                openWeatherbut.classList.remove('activebutton');
+                openpage = true;
                 fetch(api3)
                     .then(response => {
                         return response.json();
@@ -48,6 +56,10 @@ window.addEventListener("load", () => {
 
             // OpenWeather API button
             openWeatherbut.addEventListener("click", () => {
+                openWeatherbut.classList.add('activebutton');
+                darkSkybut.classList.remove('activebutton');
+                weatherstackbut.classList.remove('activebutton');
+                openpage = true;
                 fetch(api2)
                     .then(response => {
                         return response.json();
@@ -66,6 +78,10 @@ window.addEventListener("load", () => {
 
             // DarkSky API button
             darkSkybut.addEventListener("click", () => {
+                darkSkybut.classList.add('activebutton');
+                openWeatherbut.classList.remove('activebutton');
+                weatherstackbut.classList.remove('activebutton');
+                openpage = true;
                 fetch(api)
                     .then(response => {
                         return response.json();
@@ -107,6 +123,7 @@ window.addEventListener("load", () => {
         } else {
             temperatureSpan.textContent = "F";
             temperatureDegree.textContent = tempInF;
+            temperatureDegree.textContent = Math.floor(tempInF);
         }
     }
 
@@ -114,11 +131,7 @@ window.addEventListener("load", () => {
     // Icons for weatherstack
     function setIconsweatherstack(type, iconId) {
         switch (type) {
-            // case "wind":
-            //     setIcons("WIND", iconId)
-            //     break;
             case "Sunny":
-            case "Clear":
                 setIcons("CLEAR_DAY", iconId)
                 break;
             case "Clear":
@@ -142,9 +155,6 @@ window.addEventListener("load", () => {
             case "Light freezing rain":
                 setIcons("RAIN", iconId)
                 break;
-            // case "sleet":
-            //     setIcons("SLEET", iconId)
-            //     break;
             case "Patchy snow possible":
             case "Patchy freezing drizzle possible":
             case "Blowing snow":
@@ -179,12 +189,6 @@ window.addEventListener("load", () => {
             case "Clear":
                 setIcons("CLEAR_NIGHT", iconId)
                 break;
-            // case "partly cloudy day":
-            //     setIcons("PARTLY_CLOUDY_DAY", iconId)
-            //     break;
-            // case "partly cloudy night":
-            //     setIcons("PARTLY_CLOUDY_NIGHT", iconId)
-            //     break;
             case "Clouds":
                 setIcons("CLOUDY", iconId)
                 break;
