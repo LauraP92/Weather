@@ -43,13 +43,6 @@ window.addEventListener("load", () => {
     fetchData();
 
 
-    // Allow/Block know your location
-    // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(position => {
-    //         long = position.coords.longitude;
-    //         lat = position.coords.latitude;
-
-
     function handleDarkSkyFetching() {
         const api = `${proxy}https://api.darksky.net/forecast/a3f6e105434bb120691e7e8ef4cf6303/${lat},${long}`;
         darkSkyBtn.classList.add('activebutton');
@@ -119,22 +112,6 @@ window.addEventListener("load", () => {
             })
     }
 
-
-
-    // weatherstack API button
-    // weatherstackBtn.addEventListener("click", () => {
-    //     handleWeatherstackFetching();
-    // })
-    // OpenWeather API button
-    // openWeatherBtn.addEventListener("click", () => {
-    //     handleOpenWeatherFetching();
-    // })
-    // DarkSky API button
-    // darkSkyBtn.addEventListener("click", () => {
-    //     handleDarkSkyFetching();
-    // })
-    //     })
-    // }
 
     // Change unit temp measure Fahrenheit/Celsius
     function changeUnit() {
