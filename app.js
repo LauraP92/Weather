@@ -1,3 +1,4 @@
+// consoleSomething()
 window.addEventListener("load", () => {
     let long;
     let lat;
@@ -6,13 +7,14 @@ window.addEventListener("load", () => {
     let locationTimezone = document.querySelector(".location-timezone");
     let temperatureSection = document.querySelector(".temperature");
     const temperatureSpan = document.querySelector(".temperature span");
-    let darkSkybut = document.querySelector("#darkSky");
-    let openWeatherbut = document.querySelector("#openWeather");
-    let weatherstackbut = document.querySelector("#weatherstack");
+    let darkSkyBtn = document.querySelector("#darkSky");
+    let openWeatherBtn = document.querySelector("#openWeather");
+    let weatherstackBtn = document.querySelector("#weatherstack");
     let weatherUnit = "F";
     let tempInF = null;
     let openpage = false;
-    
+    const proxy = `https://cors-anywhere.herokuapp.com/`;
+
     temperatureSection.addEventListener("click", () => {
         if (openpage == true) {
             changeUnit();
@@ -20,86 +22,119 @@ window.addEventListener("load", () => {
         }
     })
 
-
-    // Allow/Block know your location
-    if (navigator.geolocation) {
+    fetchData = () => {
         navigator.geolocation.getCurrentPosition(position => {
             long = position.coords.longitude;
             lat = position.coords.latitude;
-
-            const proxy = `https://cors-anywhere.herokuapp.com/`;
-            const api = `${proxy}https://api.darksky.net/forecast/a3f6e105434bb120691e7e8ef4cf6303/${lat},${long}`;
-            const api2 = `${proxy}api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=imperial&APPID=b0dd24d4643315fefa7f09ed84a843ec`;
-            const api3 = `${proxy}http://api.weatherstack.com/current?access_key=e73da029a52c40748c6df693a526f172&query=${lat},${long}&units=f`;
-
-            // weatherstack API button
-            weatherstackbut.addEventListener("click", () => {
-                weatherstackbut.classList.add('activebutton');
-                darkSkybut.classList.remove('activebutton');
-                openWeatherbut.classList.remove('activebutton');
-                openpage = true;
-                fetch(api3)
-                    .then(response => {
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                        // Set DOM Elem from the API
-                        temperatureDescription.textContent = data.current.weather_descriptions[0];
-                        locationTimezone.textContent = data.location.name;
-                        // Set Icon
-                        setIconsweatherstack(data.current.weather_descriptions[0], document.querySelector(".icon"));
-                        tempInF = data.current.temperature;
-                        setWeather();
-                    })
+            handleDarkSkyFetching();
+            
+            darkSkyBtn.addEventListener("click", () => {
+                handleDarkSkyFetching();
             })
-
-            // OpenWeather API button
-            openWeatherbut.addEventListener("click", () => {
-                openWeatherbut.classList.add('activebutton');
-                darkSkybut.classList.remove('activebutton');
-                weatherstackbut.classList.remove('activebutton');
-                openpage = true;
-                fetch(api2)
-                    .then(response => {
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                        // Set DOM Elem from the API
-                        temperatureDescription.textContent = data.weather[0].description;
-                        locationTimezone.textContent = data.sys.country;
-                        // Set Icon
-                        setIconsOpenWeather(data.weather[0].main, document.querySelector(".icon"));
-                        tempInF = data.main.temp;
-                        setWeather();
-                    })
+            openWeatherBtn.addEventListener("click", () => {
+                handleOpenWeatherFetching();
             })
-
-            // DarkSky API button
-            darkSkybut.addEventListener("click", () => {
-                darkSkybut.classList.add('activebutton');
-                openWeatherbut.classList.remove('activebutton');
-                weatherstackbut.classList.remove('activebutton');
-                openpage = true;
-                fetch(api)
-                    .then(response => {
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                        const { temperature, summary, icon } = data.currently;
-                        // Set DOM Elem from the API
-                        temperatureDescription.textContent = summary;
-                        locationTimezone.textContent = data.timezone;
-                        // Set Icon
-                        setIconDarkSky(icon, document.querySelector(".icon"));
-                        tempInF = temperature;
-                        setWeather();
-                    })
+            weatherstackBtn.addEventListener("click", () => {
+                handleWeatherstackFetching();
             })
         })
     }
+
+    fetchData();
+
+
+    // Allow/Block know your location
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(position => {
+    //         long = position.coords.longitude;
+    //         lat = position.coords.latitude;
+
+
+    function handleDarkSkyFetching() {
+        const api = `${proxy}https://api.darksky.net/forecast/a3f6e105434bb120691e7e8ef4cf6303/${lat},${long}`;
+        darkSkyBtn.classList.add('activebutton');
+        openWeatherBtn.classList.remove('activebutton');
+        weatherstackBtn.classList.remove('activebutton');
+        openpage = true;
+        fetch(api)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                const { temperature, summary, icon } = data.currently;
+                // Set DOM Elem from the API
+                temperatureDescription.textContent = summary;
+                locationTimezone.textContent = data.timezone;
+                // Set Icon
+                setIconDarkSky(icon, document.querySelector(".icon"));
+                tempInF = temperature;
+                setWeather();
+            })
+    }
+
+
+    function handleOpenWeatherFetching() {
+        const api2 = `${proxy}api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=imperial&APPID=b0dd24d4643315fefa7f09ed84a843ec`;
+        openWeatherBtn.classList.add('activebutton');
+        darkSkyBtn.classList.remove('activebutton');
+        weatherstackBtn.classList.remove('activebutton');
+        openpage = true;
+        fetch(api2)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                // Set DOM Elem from the API
+                temperatureDescription.textContent = data.weather[0].description;
+                locationTimezone.textContent = data.sys.country;
+                // Set Icon
+                setIconsOpenWeather(data.weather[0].main, document.querySelector(".icon"));
+                tempInF = data.main.temp;
+                setWeather();
+            })
+    }
+
+
+    function handleWeatherstackFetching() {
+        const api3 = `${proxy}http://api.weatherstack.com/current?access_key=e73da029a52c40748c6df693a526f172&query=${lat},${long}&units=f`;
+        weatherstackBtn.classList.add('activebutton');
+        darkSkyBtn.classList.remove('activebutton');
+        openWeatherBtn.classList.remove('activebutton');
+        openpage = true;
+        fetch(api3)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                // Set DOM Elem from the API
+                temperatureDescription.textContent = data.current.weather_descriptions[0];
+                locationTimezone.textContent = data.location.name;
+                // Set Icon
+                setIconsweatherstack(data.current.weather_descriptions[0], document.querySelector(".icon"));
+                tempInF = data.current.temperature;
+                setWeather();
+            })
+    }
+
+
+
+    // weatherstack API button
+    // weatherstackBtn.addEventListener("click", () => {
+    //     handleWeatherstackFetching();
+    // })
+    // OpenWeather API button
+    // openWeatherBtn.addEventListener("click", () => {
+    //     handleOpenWeatherFetching();
+    // })
+    // DarkSky API button
+    // darkSkyBtn.addEventListener("click", () => {
+    //     handleDarkSkyFetching();
+    // })
+    //     })
+    // }
 
     // Change unit temp measure Fahrenheit/Celsius
     function changeUnit() {
